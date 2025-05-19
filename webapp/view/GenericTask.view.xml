@@ -1,0 +1,296 @@
+<mvc:View
+    controllerName="spoolsassetdisposaltask.controller.GenericTask"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:mdc="sap.ui.mdc"
+    xmlns:upload="sap.m.upload"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <App id="app">
+        <pages>
+            <Page
+                showHeader="false"
+                showFooter="false"
+            >
+                <content>
+                    <f:SimpleForm
+                        editable="true"
+                        layout="ColumnLayout"
+                        title="General Information"
+                        columnsM="2"
+                        columnsL="3"
+                        columnsXL="4"
+                        width="100%"
+                        class="sapUiResponsiveMargin"
+                    >
+                        <f:content>
+                            <Label text="Request ID" />
+                            <Text text="{objectId}" />
+
+                            <Label text="Requestor Name" />
+                            <Text text="{requestorName}" />
+
+                            <Label text="Department Name" />
+                            <Text text="{department_name}" />
+
+                            <Label text="Total Purchase Cost" />
+                            <Text text="{totalPurchaseCost}" />
+
+                            <Label
+                                visible="{= ${context>/taskType} === 'Witness Selection' }"
+                                text="Select the Witness"
+                            />
+                            <Select
+                                visible="{= ${context>/taskType} === 'Witness Selection' }"
+                                selectedKey="{approvalModel>/witness}" items="{/AssetDisposalTaskUI.witness}" forceSelection="false"
+                            >
+                                <core:Item
+                                    key="{email}"
+                                    text="{givenName} {familyName}"
+                                />
+                            </Select>
+                        </f:content>
+                    </f:SimpleForm>
+
+                    <Table
+                        id="idProductsTable"
+                        width="auto"
+                        class="sapUiResponsiveMargin sapUiMediumMarginTop"
+                        autoPopinMode="true"
+                        contextualWidth="Auto"
+                        items="{
+			path: 'assetDetails'
+		}"
+                    >
+                        <headerToolbar>
+                            <OverflowToolbar>
+                                <content>
+                                    <Title
+                                        text="Assets"
+                                        level="H2"
+                                    />
+                                    <ToolbarSpacer />
+                                </content>
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <columns>
+                            <Column width="8%">
+                                <Text text="Asset Number" />
+                            </Column>
+                            <Column width="10%">
+                                <Text text="Asset Description" />
+                            </Column>
+                            <Column width="8%">
+                                <Text text="Asset Class" />
+                            </Column>
+                            <Column width="8%">
+                                <Text text="Cost Center" />
+                            </Column>
+                            <Column width="8%">
+                                <Text text="Purchase Date" />
+                            </Column>
+                            <Column width="8%">
+                                <Text text="Purchase Cost" />
+                            </Column>
+                            <Column width="8%">
+                                <Text text="Company Code" />
+                            </Column>
+                            <Column width="8%">
+                                <Text text="Net Book Value" />
+                            </Column>
+                            <Column width="8%">
+                                <Text text="Disposal Method" />
+                            </Column>
+                            <Column width="8%">
+                                <Text text="Salvage Value" />
+                            </Column>
+                            <Column width="10%">
+                                <Text text="Reason For Write Off" />
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem vAlign="Middle">
+                                <cells>
+                                    <Text text="{assetNumber}" />
+                                    <!-- Asset Description -->
+                                    <Text text="{assetDesc}" />
+                                    <!-- Asset Class -->
+                                    <Text text="{assetClass}" />
+                                    <!-- Cost Center -->
+                                    <Text text="{costCenter}" />
+                                    <!-- Purchase Date -->
+                                    <Text text="{assetPurchaseDate}" />
+                                    <!-- Purchase Cost -->
+                                    <Text text="{assetPurchaseCost}" />
+                                    <!-- Company Code -->
+                                    <Text text="{companyCode}" />
+                                    <!-- Net Book Value -->
+                                    <ObjectNumber
+                                        number="{
+                                            parts: [{path: 'netBookValue'}, {path: 'Currency'}],
+                                            type: 'sap.ui.model.type.Currency',
+                                            formatOptions: {showMeasure: false}
+                                        }"
+                                        unit="{Currency}"
+                                    />
+                                    <!-- Disposal Method -->
+                                    <Text text="{disposalMethod}" />
+                                    <!-- Salvage Value -->
+                                    <Text text="{scrapValue}" />
+                                    <!-- Reason For Write Off -->
+                                    <Text text="{reasonWriteOff}" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+
+                    <Table
+                        id="approvals"
+                        width="auto"
+                        class="sapUiResponsiveMargin"
+                        autoPopinMode="true"
+                        contextualWidth="Auto"
+                        items="{
+			path: 'AuditTrail',
+            parameters : {
+                $select : 'taskType'
+            },
+            sorter: { path: 'timestamp', descending: true}
+		}"
+                    >
+                        <headerToolbar>
+                            <OverflowToolbar>
+                                <content>
+                                    <Title
+                                        text="Approvals"
+                                        level="H2"
+                                    />
+                                    <ToolbarSpacer />
+                                </content>
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <columns>
+                            <Column width="auto">
+                                <Text text="Task Type" />
+                            </Column>
+                            <Column width="auto">
+                                <Text text="Approver" />
+                            </Column>
+                            <Column width="auto">
+                                <Text text="Timestamp" />
+                            </Column>
+                            <Column width="auto">
+                                <Text text="Comment" />
+                            </Column>
+                            <Column width="auto">
+                                <Text text="Status" />
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem vAlign="Middle">
+                                <cells>
+                                    <Text text="{taskType}" />
+                                    <Text text="{approverName}" />
+                                    <Text text="{timestamp}" />
+                                    <Text text="{comment}" />
+                                    <Text text="{status}" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+
+                    <Table
+                        id="table-uploadSet"
+                        width="auto"
+                        class="sapUiResponsiveMargin"
+                        items="{path: 'attachments', templateShareable: false}"
+                    >
+                        <headerToolbar>
+                            <OverflowToolbar>
+                                <Title
+                                    text="Attachments"
+                                    level="H2"
+                                />
+                                <ToolbarSpacer />
+
+                                <ToolbarSeparator />
+
+                                <!-- Use the UploadButtonPlaceholder to add the UploadButton to the toolbar -->
+                                <upload:ActionsPlaceholder
+                                    id="uploadButton"
+                                    visible="{= ${context>/taskType} === 'Witnessed By' }"
+                                    placeholderFor="UploadButtonPlaceholder"
+                                />
+                            </OverflowToolbar>
+                        </headerToolbar>
+
+                        <dependents>
+                            <plugins.UploadSetwithTable
+                                multiple="false"
+                                httpRequestMethod="Put"
+                                uploadCompleted="onUploadCompleted"
+                                onActivated=".onPluginActivated"
+                                itemValidationHandler=".uploadFile"
+                                actions="uploadButton"
+                                uploadEnabled="true"
+                                uploadUrl="/content"
+                            />
+                        </dependents>
+
+                        <columns>
+                            <Column
+                                id="fileName"
+                                importance="High"
+                            >
+                                <header>
+                                    <Label text="File Name" />
+                                </header>
+                            </Column>
+                            <Column
+                                id="actionButton"
+                                importance="High"
+                            />
+                        </columns>
+
+                        <items>
+                            <ColumnListItem
+                                press="onItemPress"
+                                highlight="{= ${documents>uploadState} === 'Complete' ? 'Indication05' : null }"
+                            >
+                                <!-- Cells with cell template defining content for each column (cells and columns work with 1:1 mapping) -->
+                                <cells>
+                                    <HBox>
+                                        <core:Icon
+                                            src="{parts: ['mimeType', 'filename'], formatter: '.getIconSrc' }"
+                                        />
+                                        <Link
+                                            text="{filename}"
+                                            href="{parts : ['up__ID', 'ID'], formatter: '.getURL'}"
+                                            class="sapUiTinyMarginBegin"
+                                            target="_blank"
+                                        />
+                                    </HBox>
+                                    <Button
+                                        class="sapUiTinyMarginBegin"
+                                        type="Transparent"
+                                        icon="sap-icon://decline"
+                                        press="onRemoveHandler"
+                                    />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                    <Text
+                        class="spaceEnd"
+                        id="spacebelow"
+                        width="100%"
+                        text=" "
+                    />
+                </content>
+            </Page>
+        </pages>
+    </App>
+</mvc:View>

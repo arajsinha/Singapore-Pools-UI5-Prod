@@ -1,0 +1,209 @@
+{
+    "_version": "1.26.0",
+    "sap.app": {
+        "id": "spoolsassetdisposaltask",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.5"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:basic",
+            "version": "1.8.4",
+            "toolsId": "2038f5ce-3faa-4971-a2a2-d87139663f54"
+        },
+        "dataSources": {
+            "mainService": {
+               "uri": "/odata/v4/asset-disposal-task-ui/",
+                "type": "OData",
+                "settings": {
+                    "annotations": [],
+                    "localUri": "localService/metadata.xml",
+                    "odataVersion": "4.0"
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": false,
+        "dependencies": {
+            "minUI5Version": "1.82.2",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.f": {},
+                "sap.suite.ui.generic.template": {},
+                "sap.ui.comp": {},
+                "sap.ui.generic.app": {},
+                "sap.ui.table": {},
+                "sap.ushell": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "spoolsassetdisposaltask.i18n.i18n"
+                }
+            },
+            "": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                  "operationMode": "Server",
+                  "autoExpandSelect": true,
+                  "earlyRequests": true,
+                  "synchronizationMode": "None"
+                }
+            }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "async": true,
+                "viewPath": "spoolsassetdisposaltask.view",
+                "controlAggregation": "pages",
+                "controlId": "app",
+                "clearControlAggregation": false
+            },
+            "routes": [
+                {
+                    "name": "RouteGenericTask",
+                    "pattern": "DUMMY",
+                    "target": [
+                        "TargetGenericTask"
+                    ]
+                }
+            ],
+            "targets": {
+                "TargetGenericTask": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "GenericTask",
+                    "viewName": "GenericTask"
+                }
+            }
+        },
+        "rootView": {
+            "viewName": "spoolsassetdisposaltask.view.GenericTask",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "spools.assetdisposal.task"
+    },
+    "sap.bpa.task": {
+        "_version": "1.1.0",
+        "outcomes": [
+            {
+                "id": "approve",
+                "label": "Approve",
+                "type": "positive"
+            },
+            {
+                "id": "reject",
+                "label": "Reject",
+                "type": "negative"
+            },
+            {
+                "id": "void",
+                "label": "Void",
+                "type": "negative"
+            }
+        ],
+        "inputs": {
+            "$schema": "http://json-schema.org/draft-07/schema",
+            "title": "input",
+            "type": "object",
+            "required": [
+                "requestId",
+                "taskType"
+            ],
+            "properties": {
+                "requestId": {
+                    "type": "string",
+                    "title": "Request ID",
+                    "description": "Request ID"
+                },
+                "taskType": {
+                    "title": "Task type",
+                    "description": "Task type",
+                    "type": "string"
+                },
+                "attachmentEditable": {
+                    "title": "Is attachment editable?",
+                    "description": "",
+                    "type": "string"
+                },
+                "canVoid": {
+                    "title": "Can void?",
+                    "description": "",
+                    "type": "string"
+                },
+                "witnessIASGroup": {
+                    "title": "Witness IAS Group",
+                    "description": "",
+                    "type": "string"
+                }
+            }
+        },
+        "outputs": {
+            "$schema": "http://json-schema.org/draft-07/schema",
+            "title": "output",
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string",
+                    "title": "Comment",
+                    "description": "Comment"
+                },
+                "approver": {
+                    "type": "string",
+                    "title": "Approver",
+                    "description": "Approver"
+                },
+                "witness":{
+                    "type": "string",
+                    "title": "Witness",
+                    "description": "Witness"
+                }
+            }
+        },
+        "category": "approval"
+    }
+}

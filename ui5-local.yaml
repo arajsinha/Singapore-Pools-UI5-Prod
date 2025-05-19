@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "3.0"
+metadata:
+  name: spoolsassetdisposaltask
+type: application
+server:
+  customMiddleware:
+    - name: ui5-middleware-approuter
+      afterMiddleware: compression
+      configuration:
+        port: 5003
+        authenticationMethod: "route"
+        allowServices: false # allows BTP services like SAP IoT to be used 
+        appendAuthRoute: true
+        debug: true
+        allowLocalDir: true
+        xsappJson: "xs-app-dev.json"
+        destinations:
+          # check that the destination name (here: "backend") matches your router in xs-app.json
+          - name: "asset-disposal-singaporepools-srv-api"
+            url: "https://technical-field-enablement-sap-process-automation-tfe-d5fc1b39a.cfapps.eu10-004.hana.ondemand.com"
+          - name: "ui5"
+            url: "https://ui5.sap.com/"
+    - name: fiori-tools-appreload
+      afterMiddleware: compression
+      configuration:
+        port: 35729
+        path: webapp
+        delay: 300
+    - name: fiori-tools-preview
+      afterMiddleware: fiori-tools-appreload
+      configuration:
+        component: spoolsassetdisposaltask
+        ui5Theme: sap_fiori_3
